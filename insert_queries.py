@@ -34,7 +34,7 @@ def insert_query_date(**kwargs):
     try:
         dataframe =cargar_datos(kwargs['csv_path'])
         for index, row in dataframe.iterrows():
-            insertQuery += insert + f"(TO_DATE(\'{row.Date_key}\',\'YYYY-MM-DD\'),\'{row.Day_Number}\',\'{row.Day_val}\',\'{row.Month_val}\',\'{row.Short_Month}\',\'{row.Calendar_Month_Number}\',\'{row.Calendar_Year}\',\'{row.Fiscal_Month_Number}\',\'{row.Fiscal_Year});\n"
+            insertQuery += insert + f"(TO_DATE(\'{row.Date_key}\',\'YYYY-MM-DD\'),{row.Day_Number},{row.Day_val},\'{row.Month_val}\',\'{row.Short_Month}\',{row.Calendar_Month_Number},{row.Calendar_Year},{row.Fiscal_Month_Number},{row.Fiscal_Year});\n"
         return insertQuery
     except:
         return ""
@@ -42,14 +42,38 @@ def insert_query_date(**kwargs):
 # employee insertion
 def insert_query_employee(**kwargs):
     # To Do
-    pass
+    insert = f"INSERT INTO employee (Employee_Key,Employee,Preferred_Name,Is_Salesperson) VALUES "
+    insertQuery = ""
+    try:
+        dataframe =cargar_datos(kwargs['csv_path'])
+        for index, row in dataframe.iterrows():
+            insertQuery += insert + f"({row.Employee_Key},{row.Employee},{row.Preferred_Name},{row.Fiscal_YearIs_Salesperson.upper()});\n"
+        return insertQuery
+    except:
+        return ""
 
 # stock item insertion
 def insert_query_stock(**kwargs):
     # To Do
-    pass
+    insert = f"INSERT INTO stockitem (Stock_Item_Key,Stock_Item,Color,Selling_Package,Buying_Package,Brand,Size_val,Lead_Time_Days,Quantity_Per_Outer,Is_Chiller_Stock,Tax_Rate,Unit_Price,Recommended_Retail_Price,Typical_Weight_Per_Unit) VALUES "
+    insertQuery = ""
+    try:
+        dataframe =cargar_datos(kwargs['csv_path'])
+        for index, row in dataframe.iterrows():
+            insertQuery += insert + f"({row.Stock_Item_Key},\'{row.Stock_Item}\',\'{row.Color}\',\'{row.Selling_Package}\',\'{row.Buying_Package}\',\'{row.Brand}\',{row.Size_val},{row.Lead_Time_Days},{row.Quantity_Per_Outer},{row.Is_Chiller_Stock.upper()},{row.Tax_Rate},{row.Unit_Price},{row.Recommended_Retail_Price},{row.Typical_Weight_Per_Unit});\n"
+        return insertQuery
+    except:
+        return ""
     
 # fact order insert
 def insert_query_fact_order(**kwargs):
     # To Do
-    pass
+    insert = f"INSERT INTO fact_order (Order_Key,City_Key,Customer_Key,Stock_Item_Key,Order_Date_Key,Picked_Date_Key,Salesperson_Key,Picker_Key,Package,Quantity,Unit_Price,Tax_Rate,Total_Excluding_Tax,Tax_Amount,Total_Including_Tax) VALUES "
+    insertQuery = ""
+    try:
+        dataframe =cargar_datos(kwargs['csv_path'])
+        for index, row in dataframe.iterrows():
+            insertQuery += insert + f"({row.Order_Key},{row.City_Key},{row.Customer_Key},{row.Stock_Item_Key},(TO_DATE(\'{row.Order_Date_Key}\',\'YYYY-MM-DD\'),(TO_DATE(\'{row.Picked_Date_Key}\',\'YYYY-MM-DD\'),{row.Salesperson_Key},{row.Picker_Key},\'{row.Package}\',{row.Quantity},{row.Unit_Price},{row.Tax_Rate},{row.Total_Excluding_Tax},{row.Tax_Amount}),{row.Total_Including_Tax};\n"
+        return insertQuery
+    except:
+        return ""
