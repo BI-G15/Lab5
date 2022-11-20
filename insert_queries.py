@@ -47,7 +47,7 @@ def insert_query_employee(**kwargs):
     try:
         dataframe =cargar_datos(kwargs['csv_path'])
         for index, row in dataframe.iterrows():
-            insertQuery += insert + f"({row.Employee_Key},{row.Employee},{row.Preferred_Name},{row.Fiscal_YearIs_Salesperson.upper()});\n"
+            insertQuery += insert + f"({row.Employee_Key},\'{row.Employee}\',\'{row.Preferred_Name}\',\'{row.Is_Salesperson}\');\n"
         return insertQuery
     except:
         return ""
@@ -60,7 +60,7 @@ def insert_query_stock(**kwargs):
     try:
         dataframe =cargar_datos(kwargs['csv_path'])
         for index, row in dataframe.iterrows():
-            insertQuery += insert + f"({row.Stock_Item_Key},\'{row.Stock_Item}\',\'{row.Color}\',\'{row.Selling_Package}\',\'{row.Buying_Package}\',\'{row.Brand}\',{row.Size_val},{row.Lead_Time_Days},{row.Quantity_Per_Outer},{row.Is_Chiller_Stock.upper()},{row.Tax_Rate},{row.Unit_Price},{row.Recommended_Retail_Price},{row.Typical_Weight_Per_Unit});\n"
+            insertQuery += insert + f"({row.Stock_Item_Key},\'{row.Stock_Item}\',\'{row.Color}\',\'{row.Selling_Package}\',\'{row.Buying_Package}\',\'{row.Brand}\',\'{row.Size_val}\',{row.Lead_Time_Days},{row.Quantity_Per_Outer},{row.Is_Chiller_Stock},{row.Tax_Rate},{row.Unit_Price},{row.Recommended_Retail_Price},{row.Typical_Weight_Per_Unit});\n"
         return insertQuery
     except:
         return ""
@@ -73,7 +73,7 @@ def insert_query_fact_order(**kwargs):
     try:
         dataframe =cargar_datos(kwargs['csv_path'])
         for index, row in dataframe.iterrows():
-            insertQuery += insert + f"({row.Order_Key},{row.City_Key},{row.Customer_Key},{row.Stock_Item_Key},(TO_DATE(\'{row.Order_Date_Key}\',\'YYYY-MM-DD\'),(TO_DATE(\'{row.Picked_Date_Key}\',\'YYYY-MM-DD\'),{row.Salesperson_Key},{row.Picker_Key},\'{row.Package}\',{row.Quantity},{row.Unit_Price},{row.Tax_Rate},{row.Total_Excluding_Tax},{row.Tax_Amount}),{row.Total_Including_Tax};\n"
+            insertQuery += insert + f"({row.order_key},{row.city_key},{row.customer_key},{row.stock_item_key},TO_DATE(\'{row.order_date_key}\',\'YYYY-MM-DD\'),TO_DATE(\'{row.picked_date_key}\',\'YYYY-MM-DD\'),{row.salesperson_key},{row.picker_key},\'{row.package}\',{row.quantity},{row.unit_price},{row.tax_rate},{row.total_excluding_tax},{row.tax_amount},{row.total_including_tax});\n"
         return insertQuery
     except:
         return ""
